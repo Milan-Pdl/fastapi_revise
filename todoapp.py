@@ -15,10 +15,11 @@ class Todo(BaseModel):
     id: UUID =Field(default_factory=uuid4)
     name : str
     category :  str
-    status : bool
+    status : bool= False
 
 # local variable for todo
 db: list[Todo] =[]
+
 
 class TodoCreateOut(BaseOut):
     todo : Todo
@@ -27,16 +28,33 @@ class TodoCreateOut(BaseOut):
     "/create",
     response_model=TodoCreateOut
 )
-
 def create_todo(todo:Todo) ->TodoCreateOut:
     db.append(todo)
-    return TodoCreateOut(todo=Todo,msg="successfully created::")
+    return TodoCreateOut(todo=todo,msg="successfully created::")
 
 class TodoGetOut(BaseOut):
     todos: list[Todo]
 
 
-@app.get("/todos")
+@app.get(
+        "/todos",
+        response_model=TodoGetOut
+)
+
 def fetch_todos():
     return TodoGetOut(todos=db,msg="todos haru fetch vayo::")
 
+# print(db[0])
+
+# fetch todo by id
+@app.get(
+    "/todo/{user_id}",
+    response_model=TodoCreateOut | BaseOut
+)
+
+def fetchTodos_by_id(user_id:UUID) -> TodoCreateOut | BaseOut:
+    for todo in db:
+        if todo.id==user_id:
+            return TodoCreateOut(todo=todo,msg=f"todo is fetched for id {user_id}")
+    return BaseOut(msg="no to do found::")
+    
