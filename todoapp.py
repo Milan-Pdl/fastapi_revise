@@ -7,6 +7,9 @@ from pydantic import BaseModel, Field
 app=FastAPI()
 # starting doing a todo application backend!!
 
+class BaseOut(BaseModel):
+    msg : str
+    error : str=False
 
 class Todo(BaseModel):
     id: UUID =Field(default_factory=uuid4)
@@ -17,9 +20,8 @@ class Todo(BaseModel):
 # local variable for todo
 db: list[Todo] =[]
 
-class TodoCreateOut(BaseModel):
+class TodoCreateOut(BaseOut):
     todo : Todo
-    msg : str
 
 @app.post(
     "/create",
@@ -30,9 +32,8 @@ def create_todo(todo:Todo) ->TodoCreateOut:
     db.append(todo)
     return TodoCreateOut(todo=Todo,msg="successfully created::")
 
-class TodoGetOut(BaseModel):
+class TodoGetOut(BaseOut):
     todos: list[Todo]
-    msg: str
 
 
 @app.get("/todos")
