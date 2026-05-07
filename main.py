@@ -10,5 +10,5 @@ app=FastAPI()
 )
 
 async def default():
-    return {"Hi Samira, how you are feeling after dicthing me::"}
+    return {"Hi Samira, whats up"}
 
