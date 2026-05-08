@@ -99,4 +99,28 @@ def update_name(user_id: str, updatePost: UpdateName):
 
     return BaseOut(msg="no todo found::")
 
-    
+# endpoint to delete you todo as per the id
+
+@app.delete(
+    '/todo/{user_id}',
+    response_model=BaseOut
+    )
+
+def delete_todo(user_id:str) -> BaseOut:
+    try:
+        user_id = UUID(user_id)
+
+    except Exception as ex:
+        return BaseOut(
+            msg="Invalid uuid",
+            error=str(ex)
+        )
+    for i, todo  in enumerate(db):
+        if todo.id==user_id:
+            del db[i]
+            return BaseOut(msg="todo deleted successfully")
+    return BaseOut(msg="No such record with that particular id")
+
+
+
+
