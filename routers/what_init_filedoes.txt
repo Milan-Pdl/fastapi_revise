@@ -1,0 +1,105 @@
+from .todo_router import todo_router
+__all__ = ["todo_router"]
+
+This is inside routers/__init__.py.
+
+Let’s break down why this exists and what it actually does.
+
+1. Making imports cleaner (main purpose)
+
+Without __init__.py, you would import like this:
+
+from routers.todo_router import todo_router
+
+But with this setup, you can do:
+
+from routers import todo_router
+
+Because in __init__.py you explicitly expose it:
+
+from .todo_router import todo_router
+2. What __all__ actually does
+__all__ = ["todo_router"]
+
+This controls what happens when someone does:
+
+from routers import *
+
+It means:
+
+“Only export todo_router when using wildcard import.”
+
+So this will work:
+
+from routers import *
+# todo_router is available
+
+But anything NOT in __all__ will NOT be imported.
+
+3. Why this is useful (real-world reasons)
+✅ (a) Cleaner public API
+
+You are defining:
+
+“This is what this package exposes to the outside world.”
+
+Instead of exposing internal files like:
+
+user_router
+helper modules
+config files
+✅ (b) Encapsulation
+
+You can keep internal modules hidden:
+
+from .internal_stuff import helper  # exists but not exposed
+
+Only expose:
+
+__all__ = ["todo_router"]
+✅ (c) Better large project structure
+
+In bigger FastAPI projects:
+
+routers/
+    __init__.py   <-- controls what app imports
+    todo_router.py
+    user_router.py
+    admin_router.py
+
+Then in main.py:
+
+from routers import todo_router
+
+instead of importing each file manually.
+
+4. Important detail (many beginners miss this)
+
+👉 __all__ does NOTHING for normal imports like:
+
+import routers.todo_router
+
+It ONLY affects:
+
+from routers import *
+5. So in your case
+
+This line:
+
+from .todo_router import todo_router
+
+= “bring todo_router into the package namespace”
+
+And this:
+
+__all__ = ["todo_router"]
+
+= “this is the only thing I officially expose from this folder”
+
+Simple mental model
+
+Think of __init__.py like a front desk of a building:
+
+Files inside = rooms
+__init__.py = receptionist
+__all__ = “who is allowed to be introduced to visitors”
