@@ -1,0 +1,15 @@
+Middleware acts as a gatekeeper. When a user sends a request to an API, it first goes through the middleware, which then passes it to the API. Once the API processes the request, the response travels back through the middleware before reaching the user.
+
+usecases
+performance Monitoring: Measuring the time taken for an API to execute
+Logging: Capturing metadata such as request paths, methods, or payloads for debugging and analysis
+Authentication & Security: Checking if a user has a valid token before allowing access to specific API endpoints  This ensures that only authorized users can access restricted data.
+
+
+Best pratices
+
+Middleware is best suited for common logic that applies to multiple APIs rather than single endpoints.
+
+Keep middleware lightweight—avoid performing heavy database operations or intensive computations to maintain system performance
+
+If authentication or validation fails within the middleware, it immediately stops the request and sends an appropriate response to the user, preventing the invalid request from reaching the core API logic.
