@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Response
 from uuid import UUID,  uuid4
 from pydantic import BaseModel, Field
+
 
 # starting doing a todo application backend!!
 todo_router=APIRouter(prefix="/todo",tags=["todo"])
@@ -117,7 +118,7 @@ def delete_todo(user_id:str) -> BaseOut:
         if todo.id==user_id:
             del db[i]
             return BaseOut(msg="todo deleted successfully")
-    return BaseOut(msg="No such record with that particular id")
+    return Response(content=BaseOut(msg="No such record with that particular id").model_dump(),status_code=400)
 
 
 
