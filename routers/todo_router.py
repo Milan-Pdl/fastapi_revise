@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Response,Request
+from fastapi import APIRouter,Response,Request,Depends,HTTPException
 from uuid import UUID,  uuid4
 from pydantic import BaseModel, Field
 from slowapi import Limiter
@@ -49,18 +49,25 @@ def fetch_todos():
     return TodoGetOut(todos=db,msg="todos haru fetch vayo::")
 
 # print(db[0])
+def check_id(user_id :str):
+    try:
+        user_id=UUID(user_id)
+    except Exception as ex:
+        raise HTTPException( detail=BaseOut(msg="Invalied uuid",error=str(ex)),
+                            status_code=400)
 
+    return user_id
 # fetch todo by id
 @todo_router.get(
     "/todo/{user_id}",
     response_model=TodoCreateOut | BaseOut
 )
 
-def fetchTodos_by_id(user_id:str) -> TodoCreateOut | BaseOut:
-    try:
-        user_id=UUID(user_id)
-    except Exception as ex:
-        return BaseOut(msg="Invalied uuid",error=str(ex))
+def fetchTodos_by_id(user_id:UUID=Depends(check_id)) -> TodoCreateOut | BaseOut:
+    # try:
+    #     user_id=UUID(user_id)
+    # except Exception as ex:
+    #     return BaseOut(msg="Invalied uuid",error=str(ex))
     
     for todo in db:
         if todo.id==user_id:
@@ -79,16 +86,16 @@ class UpdateName(BaseModel):
 
 # updating yo do as peer the username
 @todo_router.put("/todo/{user_id}")
-def update_name(user_id: str, updatePost: UpdateName):
+def update_name(user_id: UUID=Depends(check_id), updatePost: UpdateName):
 
-    try:
-        user_id = UUID(user_id)
+    # try:
+    #     user_id = UUID(user_id)
 
-    except Exception as ex:
-        return BaseOut(
-            msg="Invalid uuid",
-            error=str(ex)
-        )
+    # except Exception as ex:
+    #     return BaseOut(
+    #         msg="Invalid uuid",
+    #         error=str(ex)
+    #     )
 
     for todo in db:
 
@@ -110,15 +117,15 @@ def update_name(user_id: str, updatePost: UpdateName):
     response_model=BaseOut
     )
 
-def delete_todo(user_id:str) -> BaseOut:
-    try:
-        user_id = UUID(user_id)
+def delete_todo(user_id:UUID=Depends(check_id)) -> BaseOut:
+    # try:
+    #     user_id = UUID(user_id)
 
-    except Exception as ex:
-        return BaseOut(
-            msg="Invalid uuid",
-            error=str(ex)
-        )
+    # except Exception as ex:
+    #     return BaseOut(
+    #         msg="Invalid uuid",
+    #         error=str(ex)
+    #     )
     for i, todo  in enumerate(db):
         if todo.id==user_id:
             del db[i]
