@@ -1,0 +1,251 @@
+Git + Fork + Pull Request Workflow Summary
+1. Original Repository vs Fork
+
+Suppose there is an original repository:
+
+Milan-Pdl/fastapi_revise
+
+You cannot directly push to it (usually).
+
+So you create a fork.
+
+Your fork becomes:
+
+ananta-pdl/fastapi_revise
+
+Think of fork like:
+
+Original Repo → copied into your GitHub account
+2. Why Fork Is Needed
+
+Fork allows you to:
+
+freely experiment
+create branches
+push code
+make pull requests
+
+without affecting original repository.
+
+3. Branches
+
+Inside your fork you created branches like:
+
+ananta
+fix-api-routes
+
+Branches are isolated workspaces.
+
+Example:
+
+main               → stable code
+fix-api-routes     → working on API fixes
+ananta             → another feature/change
+
+Why branches matter:
+
+different features stay separated
+safer collaboration
+multiple PRs possible
+4. Push Flow
+
+Local machine:
+
+Your PC
+
+Pushes code to:
+
+Your fork on GitHub
+
+using:
+
+git add .
+git commit -m "message"
+git push
+5. Pull Request (PR)
+
+A PR means:
+
+"Please merge my branch into your repository"
+
+Flow:
+
+Your Branch
+    ↓
+Pull Request
+    ↓
+Original Repository
+6. The Confusion You Had
+
+At first, you created PRs like this:
+
+Your fork branch
+   ↓
+PR
+   ↓
+Your own fork main
+
+Meaning:
+
+ananta-pdl → ananta-pdl
+
+So original repo owner could not see them.
+
+That is why:
+
+gh pr list
+
+showed PRs in your fork only.
+
+7. Correct PR Setup
+
+Correct workflow:
+
+HEAD = your fork branch
+BASE = original repo
+
+Example:
+
+HEAD → ananta-pdl:fix-api-routes
+BASE → Milan-Pdl:main
+
+Meaning:
+
+Take my code from my fork branch
+→ merge into original repository main branch
+8. Why Base and Head Exist
+
+GitHub needs to know:
+
+HEAD
+
+Where code comes FROM.
+
+your branch
+BASE
+
+Where code goes TO.
+
+original repository branch
+9. Why Merge Conflicts Happen
+
+Conflicts happen when:
+
+You changed same lines
+AND
+Original repo also changed same lines
+
+Git cannot decide automatically which code to keep.
+
+Example:
+
+Original:
+
+name = "Milan"
+
+You changed to:
+
+name = "Ananta"
+
+Meanwhile maintainer changed to:
+
+name = "Ram"
+
+Now Git gets confused:
+
+Which one should survive?
+
+This becomes a merge conflict.
+
+10. Why Conflict Fixing Is Needed
+
+Conflict fixing tells Git:
+
+"THIS is the final version I want"
+
+After fixing:
+
+git add .
+git commit
+git push
+
+PR updates automatically.
+
+11. Why PR Automatically Updates
+
+A PR is connected to:
+
+ONE branch
+
+So when you:
+
+git push
+
+to same branch,
+
+GitHub updates PR automatically.
+
+No need to create new PR every time.
+
+12. Your Final Correct Workflow
+Step 1
+
+Fork original repo.
+
+Milan-Pdl/fastapi_revise
+↓
+ananta-pdl/fastapi_revise
+Step 2
+
+Clone fork locally.
+
+git clone <your-fork-url>
+Step 3
+
+Create branch.
+
+git checkout -b fix-api-routes
+Step 4
+
+Make changes.
+
+Step 5
+
+Commit changes.
+
+git add .
+git commit -m "fix api routes"
+Step 6
+
+Push branch.
+
+git push origin fix-api-routes
+Step 7
+
+Create PR to original repo.
+
+gh pr create --repo Milan-Pdl/fastapi_revise
+Step 8
+
+Continue updating branch.
+
+git add .
+git commit -m "more fixes"
+git push
+
+PR updates automatically.
+
+13. Important Mental Model
+Fork = your copy on GitHub
+
+Branch = isolated workspace
+
+Push = upload code to your fork
+
+PR = request to merge into original repo
+
+HEAD = where code comes from
+
+BASE = where code goes
+
+Conflict = Git confused between changes
