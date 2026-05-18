@@ -1,0 +1,133 @@
+Quick Summary: Creating a New PR After Writing New Code
+Main Idea
+
+Every new feature/fix should usually have:
+
+NEW BRANCH
+→ NEW COMMITS
+→ NEW PR
+Full Mental Flow
+Original Repo (upstream)
+        ↑
+      Pull Request
+        ↑
+Your Fork (origin)
+        ↑
+     Your Branch
+        ↑
+   Local Computer
+Step-by-Step Summary
+1. Go Back To Main Branch
+git checkout main
+
+Why?
+
+Because main should contain latest clean code.
+
+2. Get Latest Code From Original Repo
+git pull upstream main
+
+Why?
+
+To avoid outdated code and merge conflicts.
+
+3. Create New Branch
+git checkout -b feature-name
+
+Example:
+
+git checkout -b add-login-api
+
+Why branches?
+
+Because each feature/change stays isolated.
+
+4. Write Code
+
+Edit files normally.
+
+5. Check Changes
+git status
+
+Shows modified/new files.
+
+6. Stage Files
+git add .
+
+Meaning:
+
+prepare files for commit
+7. Commit Changes
+git commit -m "add login api"
+
+Commit = save snapshot/history.
+
+8. Push To Your Fork
+git push origin add-login-api
+
+Meaning:
+
+local branch
+→ your GitHub fork
+9. Create Pull Request
+gh pr create --repo Milan-Pdl/fastapi_revise
+
+Important:
+
+BASE = original repo
+HEAD = your fork branch
+
+Example:
+
+BASE → Milan-Pdl/main
+HEAD → ananta-pdl:add-login-api
+10. Update Existing PR
+
+If reviewer asks changes:
+
+git add .
+git commit -m "fix review comments"
+git push
+
+PR updates automatically.
+
+No new PR needed.
+
+11. After Merge
+
+Delete old branch:
+
+git branch -d add-login-api
+
+and:
+
+git push origin --delete add-login-api
+Important Concepts Summary
+upstream
+Original repository
+
+Example:
+
+Milan-Pdl/fastapi_revise
+origin
+Your fork repository
+
+Example:
+
+ananta-pdl/fastapi_revise
+Branch
+Separate workspace for feature/fix
+Commit
+Save point in Git history
+Push
+Upload code to GitHub
+Pull Request (PR)
+Request to merge your code into original repo
+BASE
+Where code goes
+HEAD
+Where code comes from
+Golden Rule
+One feature/fix
+→ One branch
+→ One PR

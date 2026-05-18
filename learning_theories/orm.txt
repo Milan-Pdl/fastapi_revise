@@ -1,0 +1,13 @@
+Database Server
+      ↑
+TCP Connection
+      ↑
+Engine (connection manager)
+      ↑
+Session (transaction workspace)
+      ↑
+ORM Models (Python classes)
+      ↑
+Metadata (schema registry)
+      ↑
+CRUD Operations

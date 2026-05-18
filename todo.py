@@ -7,6 +7,21 @@ from slowapi.util import get_remote_address #user ko ip address lina
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.errors import RateLimitExceeded
 from fastapi.responses import JSONResponse
+from config import get_db, DEFAULT_SCHEMA_NAME,Base,engine
+from contextlib import asynccontextmanager
+
+@asynccontextmanager #will convert the code before yield into startup event and the code after yield into shutdown event
+async def lifespan(app: FastAPI):
+      async with engine.begin() as conn:
+            print("Application started")
+            #create schema if not exists
+            await conn.execute(f"CREATE SCHEMA IF NOT EXISTS {DEFAULT_SCHEMA_NAME}")
+            #create tables
+            await conn.run_sync(Base.metadata.create_all)
+      yield
+      await engine.dispose()
+      print("application stopped")
+
 
 app=FastAPI()
 
